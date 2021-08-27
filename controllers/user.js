@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
   console.log("signup controller");
+  console.log(req.body);
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
@@ -19,10 +20,12 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   console.log("login controller");
+  console.log(req.body);
   User.findOne({ email: req.body.email })
     .then(user => {
+      console.log(JSON.stringify(user._id));
       if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        return res.status(401).json({ error: 'Utilisateur non trouvé !' }); //401:NO AUTHORIZED
       }
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {
@@ -37,6 +40,11 @@ exports.login = (req, res, next) => {
               { expiresIn: '24h' }
             )
           });
+          console.log(jwt.sign(
+            { userId: user._id },
+            'RANDOM_TOKEN_SECRET',
+            { expiresIn: '24h' }
+          ));
         })
         .catch(error => res.status(500).json({ error }));
     })

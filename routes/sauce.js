@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const auth = require('../middleware/auth');
+
 router.get('/api/sauces', (req, res, next) => {
   res.status(201);
   next();
