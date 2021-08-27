@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   next();
 }); //response define header for all routes and methods(GET POST PUT DELETE..)
 
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
 app.use((req, res, next) => {
