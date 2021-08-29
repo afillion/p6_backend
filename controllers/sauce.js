@@ -19,7 +19,6 @@ exports.new = (req, res, next) => {
   delete item._id;
   const sauce = new Sauce({
     ...item
-    // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
   sauce.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   sauce.likes = 0;
@@ -43,7 +42,6 @@ exports.modifOne = (req, res, next) => {
     oldSauce.mainPepper = newSauce.mainPepper;
     oldSauce.heat = newSauce.heat;
     oldSauce.imageUrl = (newUrl !== null) ? newUrl : oldSauce.imageUrl;
-    console.log(oldSauce);
     oldSauce.save()
     .then( () => {
       res.status(200).json({ message : 'Sauce modifié' });
