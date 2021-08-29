@@ -30,7 +30,6 @@ mongoose.connect('mongodb+srv://admin-alexiscluster:p47b81253g89wnt@alexiscluste
   );
 
 app.use((req, res, next) => {
-  console.log('Requête reçue !');
   next();
 }); //server msg BEGIN
 

@@ -23,8 +23,8 @@ exports.new = (req, res, next) => {
   sauce.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   sauce.likes = 0;
   sauce.dislikes = 0;
-  sauce.userLiked = [];
-  sauce.userDisliked = [];
+  sauce.userLiked = new Array;
+  sauce.userDisliked = new Array;
   sauce.save()
   .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
   .catch(error => res.status(400).json({ error }));
@@ -33,7 +33,6 @@ exports.new = (req, res, next) => {
 exports.modifOne = (req, res, next) => {
   Sauce.findById({ _id: req.params.id })
   .then( oldSauce => {
-    console.log(req.params, req.body, req.file);
     const newSauce = (req.body.sauce !== undefined) ? JSON.parse(req.body.sauce) : req.body
     const newUrl = (req.file !== undefined) ? `http://localhost:3000/images/${req.file.filename}` : null;
     oldSauce.name = newSauce.name;
@@ -66,5 +65,37 @@ exports.delOne = (req, res, next) => {
 }
 
 exports.like = (req, res, next) => {
-
+  Sauce.findById({ _id: req.params.id })
+  .then( (sauce) => {
+    var actualLike = sauce.usersLiked.find( user => {
+      return user == req.body.userId;
+    });
+    var actualDislike = sauce.usersDisliked.find( user => {
+      return user == req.body.userId;
+    });
+    if (req.body.like > 0) {
+      sauce.likes++;
+      sauce.usersLiked.push(req.body.userId);
+    }
+    else if (req.body.like < 0) {
+      sauce.dislikes++;
+      sauce.usersDisliked.push(req.body.userId);
+    }
+    else if (req.body.like == 0) {
+      if (actualLike !== undefined) {
+        sauce.usersLiked.splice(sauce.usersLiked.indexOf(req.body.userId), 1);
+        sauce.likes--;
+      }
+      if (actualDislike !== undefined) {
+        sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.body.userId), 1);
+        sauce.dislikes--;
+      }
+    }
+    sauce.save()
+    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+    .catch(error => res.status(400).json({ error }));
+  })
+  .catch( error => {
+    res.status(404).json({ error });
+  });
 }
