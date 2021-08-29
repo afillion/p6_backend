@@ -34,7 +34,7 @@ exports.modifOne = (req, res, next) => {
   Sauce.findById({ _id: req.params.id })
   .then( oldSauce => {
     const newSauce = (req.body.sauce !== undefined) ? JSON.parse(req.body.sauce) : req.body
-    const newUrl = (req.file !== undefined) ? `http://localhost:3000/images/${req.file.filename}` : null;
+    const newUrl = (req.file !== undefined) ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
     oldSauce.name = newSauce.name;
     oldSauce.manufacturer = newSauce.manufacturer;
     oldSauce.description = newSauce.description;
