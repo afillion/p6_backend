@@ -15,6 +15,12 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+const path = require('path');
+app.use('/images', express.static(path.join(__dirname, '/images')));
+// Cela indique à Express qu'il faut gérer la ressource images 
+// de manière statique (un sous-répertoire de notre répertoire de base, __dirname )
+// à chaque fois qu'elle reçoit une requête vers la route /images
+
 mongoose.connect('mongodb+srv://admin-alexiscluster:p47b81253g89wnt@alexiscluster.tpyem.mongodb.net/AlexisCluster?retryWrites=true&w=majority',
   { useNewUrlParser: true,
   useUnifiedTopology: true })
