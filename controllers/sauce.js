@@ -1,4 +1,5 @@
 const Sauce = require('../models/sauce');
+const jwt = require('jsonwebtoken');
 
 exports.getAll = (req, res, next) => {
   Sauce.find()
@@ -33,6 +34,10 @@ exports.new = (req, res, next) => {
 exports.modifOne = (req, res, next) => {
   Sauce.findById({ _id: req.params.id })
   .then( oldSauce => {
+    if (!verify_user(req.headers.authorization.split(' ')[1], oldSauce.userId)) {
+      res.status(403).json({message: "Unauthorized"});
+      return;
+    }
     const newSauce = (req.body.sauce !== undefined) ? JSON.parse(req.body.sauce) : req.body
     const newUrl = (req.file !== undefined) ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null;
     oldSauce.name = newSauce.name;
@@ -98,4 +103,10 @@ exports.like = (req, res, next) => {
   .catch( error => {
     res.status(404).json({ error });
   });
+}
+
+function verify_user(token, sauceUserId) {
+  const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+  const userId = decodedToken.userId;
+  return userId === sauceUserId;
 }
