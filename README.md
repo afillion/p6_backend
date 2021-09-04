@@ -2,4 +2,4 @@
 
 ### Installation
 
-1) Clone project in a folder : git clone  <YOUR_FOLDER>
+In project folder, run `npm install` then `node server` to get the API run locally on your setup.
