@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauce');
 const jwt = require('jsonwebtoken');
+const fs = require('fs'); //for File System. Give access for file system functions
 
 exports.getAll = (req, res, next) => {
   Sauce.find()
@@ -45,6 +46,13 @@ exports.modifOne = (req, res, next) => {
     oldSauce.description = newSauce.description;
     oldSauce.mainPepper = newSauce.mainPepper;
     oldSauce.heat = newSauce.heat;
+    if (newUrl !== null) {
+      var url = oldSauce.imageUrl.split('/');
+      var filename = url[4];
+      console.log(filename);
+      fs.unlink(`images/${filename}`, () => {
+      });
+    }
     oldSauce.imageUrl = (newUrl !== null) ? newUrl : oldSauce.imageUrl;
     oldSauce.save()
     .then( () => {
@@ -60,25 +68,27 @@ exports.modifOne = (req, res, next) => {
 }
 
 exports.delOne = (req, res, next) => {
-  console.log(req.headers);
-  console.log(req.params);
-  console.log(req.body);
   Sauce.findById({ _id: req.params.id })
   .then((sauce) => {
     if (!verify_user(req.headers.authorization.split(' ')[1], sauce.userId)) {
       res.status(403).json({message: "Unauthorized"});
       return;
     }
+    var url = sauce.imageUrl.split('/');
+    var filename = url[4];
+    fs.unlink(`images/${filename}`, () => {
+      Sauce.deleteOne({ _id: req.params.id })
+      .then(() => {
+        res.status(200).json({ message: 'Objet supprimé !'});
+      })
+      .catch(error => {
+        res.status(400).json({ error });
+      });
+    });
   })
   .catch((error) => {
     res.status(404).json({error});
-  });
-  Sauce.deleteOne({ _id: req.params.id })
-  .then(() => {
-    res.status(200).json({ message: 'Objet supprimé !'});
-  })
-  .catch(error => {
-    res.status(400).json({ error });
+    return;
   });
 }
 
