@@ -1,4 +1,5 @@
-BACKEND HOT TAKES
+# BACKEND HOT TAKES
 
-In command line, run : npm install
-then : node server
+### Installation
+
+1) Clone project in a folder : git clone  <YOUR_FOLDER>
