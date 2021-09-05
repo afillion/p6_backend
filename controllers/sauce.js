@@ -1,5 +1,5 @@
 const Sauce = require('../models/sauce');
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken'); //use for create and decode token
 const fs = require('fs'); //for File System. Give access for file system functions
 
 exports.getAll = (req, res, next) => {
@@ -49,7 +49,6 @@ exports.modifOne = (req, res, next) => {
     if (newUrl !== null) {
       var url = oldSauce.imageUrl.split('/');
       var filename = url[4];
-      console.log(filename);
       fs.unlink(`images/${filename}`, () => {
       });
     }

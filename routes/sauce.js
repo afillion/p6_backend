@@ -13,3 +13,4 @@ router.delete('/:id', auth, sauceCtrl.delOne);
 router.post('/:id/like', auth, sauceCtrl.like);
 
 module.exports = router;
+// Define routes for each path.

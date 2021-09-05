@@ -6,3 +6,4 @@ const userSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('User', userSchema);
+// Create in MangoDB Atlas a model for User objects

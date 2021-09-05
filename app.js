@@ -12,6 +12,7 @@ const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
 const app = express();
+// Replace bodyParser : It's include in express now
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

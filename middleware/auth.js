@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 
+
+// Authentification middleware : Use token in req.headers.authorization and decode it to get userId.
+// Compare with req.body.userId
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1];

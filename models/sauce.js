@@ -15,3 +15,4 @@ const sauceSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Sauce', sauceSchema);
+// Create in MangoDB Atlas a model for Sauce objects
